@@ -22,10 +22,10 @@ function displayProduct(product) {
     document.getElementById("title").innerHTML +=product.name;
     document.getElementById("price").innerHTML +=product.price;
     document.getElementById("description").innerHTML +=product.description;
-   for (let i = 0; i < product.colors.length; i++) {
-    let color = product.colors[i];
-    document.getElementById("colors").innerHTML +=`
-    <option value="${color}">${color}</option>`;
+    for (let i = 0; i < product.colors.length; i++) {
+        let color = product.colors[i];
+        document.getElementById("colors").innerHTML +=`
+        <option value="${color}">${color}</option>`;
     }
     console.log(product)
 }
