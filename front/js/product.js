@@ -7,13 +7,13 @@ function getOneProduct() {
 
     return fetch(`http://localhost:3000/api/products/${id}`)
         .then(function(httpBodyResponse) {
-          return httpBodyResponse.json()
+          return httpBodyResponse.json();
         })
         .then(function(product) {
-          displayProduct(product)
+          displayProduct(product);
         })
         .catch(function(error) {
-            alert(error)
+            alert(error);
         })
 }
 
@@ -29,7 +29,7 @@ function displayProduct(product) {
         document.getElementById("colors").innerHTML +=`
         <option value="${color}">${color}</option>`;
     }
-    console.log(product)
+    console.log(product);
 }
 
 document.getElementById("addToCart").addEventListener("click", addToCart);
@@ -50,15 +50,15 @@ function addToCart() {
     }
 
     const order = {
-        product_id: product_id,
+        id: id,
         price: price,
         quantity: quantity, 
         color: color, 
     }
 
-    localStorage.setItem(product_id, JSON.stringify(order))
+    localStorage.setItem(id, JSON.stringify(order));
 
-    localStorage.getItem(product_id, price, quantity, color)
+    localStorage.getItem(id, price, quantity, color);
 
     if (localStorage.getItem("cart") == null) {
         
@@ -66,6 +66,7 @@ function addToCart() {
 
     //window.location.href = "./index.html";
 
-    console.log(order)
+    console.log(order);
     console.log(localStorage.getItem("cart"));
+    console.log(price);
 }
