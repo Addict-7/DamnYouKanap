@@ -4,6 +4,7 @@ let id = params.get("id");
 getOneProduct()
 
 function getOneProduct() {
+
     return fetch(`http://localhost:3000/api/products/${id}`)
         .then(function(httpBodyResponse) {
           return httpBodyResponse.json()
@@ -17,6 +18,7 @@ function getOneProduct() {
 }
 
 function displayProduct(product) {
+
     document.getElementsByClassName("item__img")[0].innerHTML +=`
     <img src="${product.imageUrl}" alt="${product.altTxt}">`
     document.getElementById("title").innerHTML +=product.name;
@@ -33,8 +35,11 @@ function displayProduct(product) {
 document.getElementById("addToCart").addEventListener("click", addToCart);
 
 function addToCart() {
-    let quantity = document.getElementById("quantity").value;
-    let color = document.getElementById("colors").value;
+
+    const price = document.getElementById("price").value;
+    const quantity = document.getElementById("quantity").value;
+    const color = document.getElementById("colors").value;
+
     if (color == "") {
         alert("Choisissez une couleur valide.");
         return;
@@ -43,14 +48,24 @@ function addToCart() {
         alert("Choississez une quantité valide.");
         return;
     }
-    let order = {quantity: quantity, color: color, product_id: id};
+
+    const order = {
+        product_id: product_id,
+        price: price,
+        quantity: quantity, 
+        color: color, 
+    }
+
+    localStorage.setItem(product_id, JSON.stringify(order))
+
+    localStorage.getItem(product_id, price, quantity, color)
 
     if (localStorage.getItem("cart") == null) {
         
     }
 
+    //window.location.href = "./index.html";
+
     console.log(order)
     console.log(localStorage.getItem("cart"));
 }
-
-
