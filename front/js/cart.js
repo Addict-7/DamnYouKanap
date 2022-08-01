@@ -12,7 +12,8 @@ function orderProducts() {
             alert(error)
         })
 }
-function displayProducts(products) {
+
+function displayProduct(products) {
   for (let i = 0; i < products.length; i++) {
     let product = products[i];
     document.getElementById("items").innerHTML +=`
