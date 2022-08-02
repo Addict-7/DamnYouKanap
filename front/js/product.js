@@ -49,6 +49,9 @@ function addToCart() {
     const price = document.getElementById("price").innerText;
     const quantity = document.getElementById("quantity").value;
     const color = document.getElementById("colors").value;
+    const name = document.getElementById("title").innerText;
+    const imageUrl = document.querySelector(".item__img img").src;
+    const altTxt = document.querySelector(".item__img img").alt;
 
     // Ajout d'une Alerte si la couleur n'est pas valide
     if (color == "") {
@@ -64,7 +67,9 @@ function addToCart() {
     // Création d'une commande constante Objet + rajout dans la commande du prix * quantité 
     const order = {
         id: id,
-        price: Number (price) * Number (quantity),
+        name: name,
+        imageUrl: imageUrl,
+        altTxt: altTxt,
         quantity: Number (quantity), 
         color: color, 
     }
@@ -79,7 +84,7 @@ function addToCart() {
     } else {
         // Récupération du panier à partir du localStorage ( sous sa forme JSON ) 
         // et conversion de celui-ci en objet Javascript et AFFECTATION de celui-ci à la variable cart
-        cart = JSON.parse(localStorage.getItem("cart"))
+        cart = JSON.parse(localStorage.getItem("cart"));
     }
     
     // Version implicite Fonction + Array.prototype.(some)
@@ -121,7 +126,7 @@ function addToCart() {
         // Additionnes la quantité de la nouvelle commande à l'ancienne
         foundOrder.quantity += order.quantity;
         // Multiplies le prix par la quantité 
-        foundOrder.price = price * foundOrder.quantity;
+        //foundOrder.price = price * foundOrder.quantity;
         console.log(foundOrder);
     } else {
         // On ajoute (push) la commande au panier ( Lire de droite à gauche )
@@ -145,7 +150,7 @@ function addToCart() {
     console.log(cart); 
 
     // Retour à l'accueil après un ajout de produit au panier
-    window.location.href = "./index.html";
+    //window.location.href = "./index.html";
 
     //console.log(order);
     //console.log(localStorage.getItem("cart"));
