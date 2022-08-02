@@ -1,8 +1,13 @@
+// Création d'une variable params basée sur URLSearchParams
 let params = new URLSearchParams(document.location.search);
+// Création d'une variable id basée sur params
 let id = params.get("id");
 
+// Appel de la fonction getOneProduct
 getOneProduct()
 
+// Création d'une fonction " getOneProduct " sans paramètre, qui appel l'API d'un produit
+// précis via son ID
 function getOneProduct() {
 
     return fetch(`http://localhost:3000/api/products/${id}`)
@@ -18,6 +23,8 @@ function getOneProduct() {
         })
 }
 
+// Création d'une fonction " displayProduct " avec en paramètre " product " qui créée 
+// du contenu HTML après avoir extrait le contenu depuis l'API
 function displayProduct(product) {
 
     document.getElementsByClassName("item__img")[0].innerHTML +=`

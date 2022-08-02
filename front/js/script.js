@@ -1,5 +1,7 @@
+// Appel de la fonction getProducts
 getProducts ();
 
+// Création d'une fonction " getProducts " sans paramètre qui " fetch " l'API
 function getProducts() {
     return fetch('http://localhost:3000/api/products')
         .then(function(httpBodyResponse) {
@@ -13,6 +15,8 @@ function getProducts() {
         });
 }
 
+// Création fonction " displayProducts " avec comme paramètre " products " qui ajoute 
+// du contenu au HTML extrait de l'API
 function displayProducts(products) {
     for (let i = 0; i < products.length; i++) {
       let product = products[i];
