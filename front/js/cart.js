@@ -10,8 +10,8 @@ function orderProducts() {
         .then(function(httpBodyResponse) {
           return httpBodyResponse.json()
         })
-        .then(function(products) {
-          //displayProduct(products)
+        .then(function(product) {
+          //displayProduct(product)
         })
         .catch(function(error) {
             alert(error)
@@ -24,34 +24,7 @@ function displayProduct(cart) {
   
   for (let i = 0; i < cart.length; i++) {
     let product = cart[i];
-  document.getElementById("cart__items").innerHTML +=`
-    <article class="cart__item" data-id="${cart[i].id}" data-color="${cart[i].color}">
-      <div class="cart__item__img">
-        <img src="${cart[i].imageUrl}" alt="${cart[i].altTxt}">
-      </div>
-      <div class="cart__item__content">
-        <div class="cart__item__content__description">
-            <h2>${cart[i].name}</h2>
-            <p>${cart[i].color}</p>
-            <p>${cart[i].price}</p>
-        </div>
-      <div class="cart__item__content__settings">
-      <div class="cart__item__content__settings__quantity">
-          <p>Qté : ${cart[i].quantity} </p>
-          <input type="number" data-id="${cart[i].id}" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${cart[i].quantity}">
-      </div>
-      <div class="cart__item__content__settings__delete">
-          <p class="deleteItem">Supprimer</p>
-      </div>
-      </div>
-      </div>
-    </article>`;
-  }
-}
-
-for (let i = 0; i < cart.length; i++) {
-
-  document.getElementById("cart__items").innerHTML +=`
+    document.getElementById("cart__items").innerHTML +=`
     <article class="cart__item" data-id="${cart[i].id}" data-color="${cart[i].color}">
     <div class="cart__item__img">
       <img src="${cart[i].imageUrl}" alt="${cart[i].altTxt}">
@@ -73,8 +46,9 @@ for (let i = 0; i < cart.length; i++) {
     </div>
     </div>
     </article>`;
-
+  }
 }
+
 
 /* 1 - Au clic sur supprimer mettre à jour le localStorage & l'affichage
    2 - Récupérer dans l'API le prix de chaque canapé
@@ -82,10 +56,6 @@ for (let i = 0; i < cart.length; i++) {
    4 - Modification manuelle des quantités dans le panier avec màj du côté Storage
    5 - Formulaire Regex à chaque champ
    6 - Récupérer valeur d'un champ Regex - Quoi faire si true/false
-
-
-
-
 
 
 /* 1 - Tu dois d'abord récupérer ton panier sous la forme d'un tableau javascript, depuis le localStorage

@@ -107,7 +107,6 @@ function addToCart() {
 
     /* // Version explicite Variable + Boucle For
     let orderDoesExists = false;
-
     for(let i = 0; i < cart.length; i++) {
         let otherOrder = cart[i];
         orderDoesExists = checkIfEqual(otherOrder);
