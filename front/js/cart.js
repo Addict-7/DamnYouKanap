@@ -1,79 +1,87 @@
-let cart = JSON.parse(localStorage.getItem("cart"));
-console.log(cart);
+let cart = JSON.parse(localStorage['cart']);
 
-function delete_product_from_cart(id) {
-  let cart = JSON.parse(localStorage['cart']);
-  var filteredCart = cart.filter(e => e.product_id != id);
-  localStorage.setItem('cart', JSON.stringify(filteredCart));
+function delete_product_from_cart(id, color) {
+  cart = cart.filter(c => c.product_id != id || c.product_color != color);
+  console.log(id);
+  console.log(color);
+  console.log(cart);
+  localStorage.setItem('cart', JSON.stringify(cart));
 }
 
 displayCart();
 
 async function displayCart() {
   
-  document.getElementById('cart__items').innerHTML = "";
+  document.getElementById("cart__items").innerHTML = "";
   
   let totalPrice = 0;
   let totalQuantity = 0;
   let cart = JSON.parse(localStorage["cart"]);
 
     for (let order of cart) {
-      await fetch(`http://localhost:3000/api/products/${order.product_id}`)
-            .then(function(httpBodyResponse) {
-                if (httpBodyResponse.ok) {
-                    return httpBodyResponse.json()
-                }
-            })
-            .then(function(product) {
+      console.log(order);
+      console.log(order.name);
+      await fetch(`http://localhost:3000/api/products/${order.id}`)
+          .then((data) => data.json())
+          .then((data) => {
               totalQuantity += order.quantity;
-              totalPrice += order.quantity * order.price;
-                displayProduct(order, product);
-            })
-            .catch(function(error) {
-                alert(error);
-            });
+              totalPrice += order.quantity * data.price;
+                displayProduct(order, data);
+                deleteItem(order);
+                console.log(data)
+          })
+          .catch(function(error) {
+              alert(error);
+          });
     }
     document.getElementById('totalQuantity').innerHTML = totalQuantity;
     document.getElementById('totalPrice').innerHTML = totalPrice;
 }
 
-displayProduct(cart);
+function displayProduct(item, product) {
 
-function displayProduct(cart) {
-  
-  for (let i = 0; i < cart.length; i++) {
-    let product = cart[i];
     document.getElementById("cart__items").innerHTML +=`
-      <article class="cart__item" data-id="${cart[i].id}" data-color="${cart[i].color}">
+      <article class="cart__item" data-id="${item.id}" data-color="${item.color}">
         <div class="cart__item__img">
-          <img src="${cart[i].imageUrl}" alt="${cart[i].altTxt}">
+          <img src="${item.imageUrl}" alt="${item.altTxt}">
         </div>
         <div class="cart__item__content">
             <div class="cart__item__content__description">
-                <h2>${cart[i].name}</h2>
-                <p>${cart[i].color}</p>
-                <p>${cart[i].price}</p>
+                <h2>${item.name}</h2>
+                <p>${item.color}</p>
+                <p>${product.price}€</p>
             </div>
           <div class="cart__item__content__settings">
             <div class="cart__item__content__settings__quantity">
                 <p>Qté :  </p>
-                <input type="number" data-id="${cart[i].id}" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${cart[i].quantity}">
+                <input type="number" data-id="${item.id}" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${item.quantity}">
             </div>
             <div class="cart__item__content__settings__delete">
-                <p class="deleteItem">Supprimer</p>
+                <p class="deleteItem" data-id="${item.id}" data-color="${item.color}">Supprimer</p>
             </div>
           </div>
         </div>
       </article>`;
+}
+
+/*function deleteOrder(id, color, price) {
+  let cart = JSON.parse(localStorage["cart"]);
+}*/
+
+function deleteItem() {
+  let deleteBtns = document.getElementsByClassName("deleteItem");
+  for(btn of deleteBtns) {
+    //btn.addEventListener("click", delete_product_from_cart(id));
+    btn.addEventListener("click", (btn) => {
+      console.log('btn', btn.target.dataset.color)
+      delete_product_from_cart(btn.target.dataset.id, btn.target.dataset.color);
+    });
   }
 }
 
 
 
 
-
-
-git 
 /*document.getElementsByClassName("deleteItem").addEventListener("click", deleteItem);
 
 function deleteItem (event) {
