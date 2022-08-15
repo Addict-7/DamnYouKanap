@@ -1,11 +1,17 @@
 let cart = JSON.parse(localStorage['cart']);
 
 function delete_product_from_cart(id, color) {
-  cart = cart.filter(c => c.product_id != id || c.product_color != color);
-  console.log(id);
-  console.log(color);
-  console.log(cart);
+  // On passe 2 arguments : id et color pour les comparer avec ce qu
+  // il y a dans le cart aux clés .id et .color 
+
+  cart = cart.filter(c => !(c.id == id && c.color == color));
+                
+  // Envoyer les nouvelles données dans le localStorage
   localStorage.setItem('cart', JSON.stringify(cart));
+
+  //  Avertir de la suppression et recharger la page
+  alert('Votre article a bien été supprimé.');
+  window.location.href = "cart.html";
 }
 
 displayCart();
@@ -28,7 +34,6 @@ async function displayCart() {
               totalPrice += order.quantity * data.price;
                 displayProduct(order, data);
                 deleteItem(order);
-                console.log(data)
           })
           .catch(function(error) {
               alert(error);
@@ -39,7 +44,7 @@ async function displayCart() {
 }
 
 function displayProduct(item, product) {
-
+  
     document.getElementById("cart__items").innerHTML +=`
       <article class="cart__item" data-id="${item.id}" data-color="${item.color}">
         <div class="cart__item__img">
@@ -64,47 +69,79 @@ function displayProduct(item, product) {
       </article>`;
 }
 
-/*function deleteOrder(id, color, price) {
-  let cart = JSON.parse(localStorage["cart"]);
-}*/
 
 function deleteItem() {
   let deleteBtns = document.getElementsByClassName("deleteItem");
   for(btn of deleteBtns) {
-    //btn.addEventListener("click", delete_product_from_cart(id));
     btn.addEventListener("click", (btn) => {
-      console.log('btn', btn.target.dataset.color)
       delete_product_from_cart(btn.target.dataset.id, btn.target.dataset.color);
     });
   }
 }
 
+document.getElementsByClassName("cart__order__form")[0].addEventListener("submit", order);
+
+let contact = {
+    firstName: document.getElementById('firstName').value,
+    lastName: document.getElementById('lastName').value,
+    address: document.getElementById('address').value,
+    city: document.getElementById('city').value,
+    email: document.getElementById('email').value
+  }
+
+function checkContact(contact) {
+  let contactCorrect = true;
+  
+  let nameRGEX = /^[a-zA-Z\s,'-]{2,}$/;
+  if (! nameRGEX.test(contact.firstName)) {
+      document.getElementById("firstNameErrorMsg").innerHTML = "Prénom incorrect";
+      contactCorrect = false;
+  } else {
+      document.getElementById("firstNameErrorMsg").innerHTML = "";
+  }
+  if (! nameRGEX.test(contact.lastName)) {
+      document.getElementById("lastNameErrorMsg").innerHTML = "Nom incorrect";
+      contactorrect = false;
+  } else {
+      document.getElementById("lastNameErrorMsg").innerHTML = "";
+  }
+
+  let addressRGEX = /^[a-zA-Z0-9\s,.'-]{3,}$/;
+  if (! addressRGEX.test(contact.address)) {
+      document.getElementById("addressErrorMsg").innerHTML = "Adresse incorrecte";
+      contactCorrect = false;
+  } else {
+      document.getElementById("addressErrorMsg").innerHTML = "";
+  }
+
+  let cityRGEX = /^[a-zA-Z\s.'-]{3,}$/;
+  if (! cityRGEX.test(contact.city)) {
+      document.getElementById("cityErrorMsg").innerHTML = "Ville incorrecte";
+      contactCorrect = false;
+  } else {
+      document.getElementById("cityErrorMsg").innerHTML = "";
+  }
+
+  let mailRGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  if (! mailRGEX.test(contact.email)) {
+      document.getElementById("emailErrorMsg").innerHTML = "Email incorrect";
+      contactCorrect = false;
+  } else {
+      document.getElementById("emailErrorMsg").innerHTML = "";
+  }
+
+  return contactCorrect;
+}
 
 
 
-/*document.getElementsByClassName("deleteItem").addEventListener("click", deleteItem);
 
-function deleteItem (event) {
-  let input = event.target;
-  let cartItem = input.closest('cart__item');
-  let cartProductsArray = arrayCart();
-  let dataId = cartItem.getAttribute("data-id");
-  let dataColor = cartItem.getAttribute("data-color");
 
-}*/
 
-/*let removeCartItemButtons = document.getElementsByClassName('deleteItem');
-console.log(removeCartItemButtons);
-for (let i = 0; i < removeCartItemButtons.length; i++) {
-let button = removeCartItemButtons[i];
-button.addEventListener('click', function(event) {
-console.log('cliked');
-let buttonClicked = event.target;
-buttonClicked.parentElement.parentElement.remove();
-updateCartTotal();
 
-})
-}*/
+
+
+
 
 
 
