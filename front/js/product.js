@@ -148,6 +148,9 @@ function addToCart() {
     // Affiche dans la console, le panier sous la forme d'un tableau contenant la commande
     console.log(cart); 
 
+    // Alerte 
+    alert('Le produit a bien été ajouté au panier.');
+
     // Retour à l'accueil après un ajout de produit au panier
     //window.location.href = "./index.html";
 

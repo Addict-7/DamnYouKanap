@@ -5,7 +5,7 @@ function delete_product_from_cart(id, color) {
   // il y a dans le cart aux clés .id et .color 
 
   cart = cart.filter(c => !(c.id == id && c.color == color));
-                
+
   // Envoyer les nouvelles données dans le localStorage
   localStorage.setItem('cart', JSON.stringify(cart));
 
@@ -14,8 +14,10 @@ function delete_product_from_cart(id, color) {
   window.location.href = "cart.html";
 }
 
+// Appel de la fonction displayCart
 displayCart();
 
+// Création de la fonction asynchrone displayCart
 async function displayCart() {
   
   document.getElementById("cart__items").innerHTML = "";
@@ -30,8 +32,8 @@ async function displayCart() {
       await fetch(`http://localhost:3000/api/products/${order.id}`)
           .then((data) => data.json())
           .then((data) => {
-              totalQuantity += order.quantity;
-              totalPrice += order.quantity * data.price;
+              totalQuantity += Number (order.quantity);
+              totalPrice += Number (order.quantity * data.price);
                 displayProduct(order, data);
                 deleteItem(order);
           })
@@ -59,7 +61,7 @@ function displayProduct(item, product) {
           <div class="cart__item__content__settings">
             <div class="cart__item__content__settings__quantity">
                 <p>Qté :  </p>
-                <input type="number" data-id="${item.id}" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${item.quantity}">
+                <input type="number" data-id="${item.id}" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${item.quantity}" onchange="changeQuantity('${item.color}', '${item.id}', this.value, ${product.price})">
             </div>
             <div class="cart__item__content__settings__delete">
                 <p class="deleteItem" data-id="${item.id}" data-color="${item.color}">Supprimer</p>
@@ -67,6 +69,25 @@ function displayProduct(item, product) {
           </div>
         </div>
       </article>`;
+}
+
+// Création fonction changeQuantity
+const changeQuantity = (color, id, newQuantity, price) => {
+
+  let order = cart.find(o => (o.id == id && o.color == color)); 
+  let differenceQuantity = newQuantity - order.quantity;
+  let totalQuantity = Number (document.getElementById('totalQuantity').innerText);
+  totalQuantity += differenceQuantity;
+  document.getElementById('totalQuantity').innerHTML = totalQuantity;
+  order.quantity = newQuantity;
+  let differencePrice = price * differenceQuantity;
+  let totalPrice = Number (document.getElementById('totalPrice').innerText) + differencePrice;
+  document.getElementById('totalPrice').innerHTML = totalPrice;
+  localStorage.setItem("cart", JSON.stringify (cart)); 
+  
+  console.log(order)
+  console.log(color, id, newQuantity)
+  console.log(totalQuantity)
 }
 
 
@@ -87,7 +108,7 @@ let contact = {
     address: document.getElementById('address').value,
     city: document.getElementById('city').value,
     email: document.getElementById('email').value
-  }
+}
 
 function checkContact(contact) {
   let contactCorrect = true;
