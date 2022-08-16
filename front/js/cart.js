@@ -85,11 +85,7 @@ const changeQuantity = (color, id, newQuantity, price) => {
   document.getElementById('totalPrice').innerHTML = totalPrice;
   localStorage.setItem("cart", JSON.stringify (cart)); 
   
-  console.log(order)
-  console.log(color, id, newQuantity)
-  console.log(totalQuantity)
 }
-
 
 function deleteItem() {
   let deleteBtns = document.getElementsByClassName("deleteItem");
@@ -100,35 +96,53 @@ function deleteItem() {
   }
 }
 
-document.getElementsByClassName("cart__order__form")[0].addEventListener("submit", order);
+let form = document.getElementsByClassName("cart__order__form")[0];
+  form.addEventListener("submit", function(event, order, contact) {
+  event.preventDefault();
+  console.log(form.firstName.value)
+  if (checkContact(form)) {
+    let contact = {
+      firstName: document.getElementById('firstName').value,
+      lastName: document.getElementById('lastName').value,
+      address: document.getElementById('address').value,
+      city: document.getElementById('city').value,
+      email: document.getElementById('email').value
+    }
+  console.log(contact)
+  };
+  // Créer Product tel qu'attendu par l'API
+  // Product true, créer un objet Product + Contact
+  // Appeler l'API 
+})
 
-let contact = {
-    firstName: document.getElementById('firstName').value,
-    lastName: document.getElementById('lastName').value,
-    address: document.getElementById('address').value,
-    city: document.getElementById('city').value,
-    email: document.getElementById('email').value
-}
+/*let contact = {
+  firstName: document.getElementById('firstName').value,
+  lastName: document.getElementById('lastName').value,
+  address: document.getElementById('address').value,
+  city: document.getElementById('city').value,
+  email: document.getElementById('email').value
+}*/
+
 
 function checkContact(contact) {
   let contactCorrect = true;
   
   let nameRGEX = /^[a-zA-Z\s,'-]{2,}$/;
-  if (! nameRGEX.test(contact.firstName)) {
+  if (! nameRGEX.test(contact.firstName.value)) {
       document.getElementById("firstNameErrorMsg").innerHTML = "Prénom incorrect";
       contactCorrect = false;
   } else {
       document.getElementById("firstNameErrorMsg").innerHTML = "";
   }
-  if (! nameRGEX.test(contact.lastName)) {
+  if (! nameRGEX.test(contact.lastName.value)) {
       document.getElementById("lastNameErrorMsg").innerHTML = "Nom incorrect";
-      contactorrect = false;
+      contactcorrect = false;
   } else {
       document.getElementById("lastNameErrorMsg").innerHTML = "";
   }
 
   let addressRGEX = /^[a-zA-Z0-9\s,.'-]{3,}$/;
-  if (! addressRGEX.test(contact.address)) {
+  if (! addressRGEX.test(contact.address.value)) {
       document.getElementById("addressErrorMsg").innerHTML = "Adresse incorrecte";
       contactCorrect = false;
   } else {
@@ -136,7 +150,7 @@ function checkContact(contact) {
   }
 
   let cityRGEX = /^[a-zA-Z\s.'-]{3,}$/;
-  if (! cityRGEX.test(contact.city)) {
+  if (! cityRGEX.test(contact.city.value)) {
       document.getElementById("cityErrorMsg").innerHTML = "Ville incorrecte";
       contactCorrect = false;
   } else {
@@ -144,16 +158,25 @@ function checkContact(contact) {
   }
 
   let mailRGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-  if (! mailRGEX.test(contact.email)) {
+  if (! mailRGEX.test(contact.email.value)) {
       document.getElementById("emailErrorMsg").innerHTML = "Email incorrect";
       contactCorrect = false;
   } else {
       document.getElementById("emailErrorMsg").innerHTML = "";
   }
-
+  
   return contactCorrect;
 }
 
+async function order() {
+
+
+  // Récupérer le panier et envoyer la commande à l'API par méthode POST
+  // Récupérer la réponse et la transformer
+  // Rediriger vers la page de confirmation avec l'ID de la commande créée
+  
+
+}
 
 
 
