@@ -1,7 +1,8 @@
+// Variable utilisant le ' cart '
 let cart = JSON.parse(localStorage['cart']);
 
 function delete_product_from_cart(id, color) {
-  // On passe 2 arguments : id et color pour les comparer avec ce qu
+  // On passe 2 arguments : id et color pour les comparer avec ce qu'
   // il y a dans le cart aux clés .id et .color 
 
   cart = cart.filter(c => !(c.id == id && c.color == color));
@@ -97,9 +98,13 @@ function deleteItem() {
 }
 
 let form = document.getElementsByClassName("cart__order__form")[0];
-  form.addEventListener("submit", function(event, order, contact) {
+form.addEventListener("submit", function(event, order, contact) {
   event.preventDefault();
   console.log(form.firstName.value)
+  if (cart == null || cart.length == 0) {
+    alert('Votre panier est vide. Veuillez le remplir avant de commander.');
+    return;
+  }
   if (checkContact(form)) {
     let contact = {
       firstName: document.getElementById('firstName').value,
@@ -108,21 +113,32 @@ let form = document.getElementsByClassName("cart__order__form")[0];
       city: document.getElementById('city').value,
       email: document.getElementById('email').value
     }
-  console.log(contact)
-  };
-  // Créer Product tel qu'attendu par l'API
-  // Product true, créer un objet Product + Contact
-  // Appeler l'API 
+    // Création de la variable ' products ' contenant un tableau ( vide dans un premier temps )
+    let products = [];
+    // Création d'un boucle for pour récupérer à partir du ' cart ' ( order = cart[i] ) les ids et les ' push ' dans ' products '.
+    for(let order of cart) {
+      let id = order.id;
+      products.push(id);
+    }
+    console.log(products)
+    fetch(`http://localhost:3000/api/products/order`, {
+      method: "POST",
+      body: JSON.stringify({
+        contact:contact, 
+        products:products
+      }),
+      headers: {
+        "Content-Type" : "application/json"
+      },
+    })
+    .then((reponse)=> reponse.json())
+    .then((data)=>{
+      console.log(data);
+      //window.location.href = `./confirmation.html?id=${data.orderId}`;  
+    })
+  
+  }
 })
-
-/*let contact = {
-  firstName: document.getElementById('firstName').value,
-  lastName: document.getElementById('lastName').value,
-  address: document.getElementById('address').value,
-  city: document.getElementById('city').value,
-  email: document.getElementById('email').value
-}*/
-
 
 function checkContact(contact) {
   let contactCorrect = true;
@@ -167,41 +183,3 @@ function checkContact(contact) {
   
   return contactCorrect;
 }
-
-async function order() {
-
-
-  // Récupérer le panier et envoyer la commande à l'API par méthode POST
-  // Récupérer la réponse et la transformer
-  // Rediriger vers la page de confirmation avec l'ID de la commande créée
-  
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-/* 1 - Au clic sur supprimer mettre à jour le localStorage & l'affichage
-   2 - Récupérer dans l'API le prix de chaque canapé
-   3 - Montant commande qui s'affiche
-   4 - Modification manuelle des quantités dans le panier avec màj du côté Storage
-   5 - Formulaire Regex à chaque champ
-   6 - Récupérer valeur d'un champ Regex - Quoi faire si true/false
-
-
-/* 1 - Tu dois d'abord récupérer ton panier sous la forme d'un tableau javascript, depuis le localStorage
-2 - Dans ton panier, tu auras plein de commandes. Tu vas devoir les traiter individuellement, donc faire 
-une boucle for dans laquelle tu pourras déclarer une variable pour la commande en cours de traitement.
-3 - De cette commande, tu peux récupérer l'id du produit. Et donc, récupérer toutes les informations 
-complètes du produit en le demandant à ton serveur (avec un fetch, comme tu as fait dans product.js)
-4 - Une fois que tu as tes deux variables order et product, tu as tout ce qu'il faut pour afficher 
-les informations dans ta méthode displayProduct (l'image, le nom, la couleur, etc.) Attention, tu 
-vas avoir des informations à récupérer à partir de la commande et d'autres à partir du produit. */
