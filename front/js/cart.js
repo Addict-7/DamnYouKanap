@@ -1,16 +1,22 @@
 // Variable utilisant le ' cart '
 let cart = JSON.parse(localStorage['cart']);
 
+// Création d'une fonction pour supprimer un produit
+/**
+ * La fonction permets de comparer les objets que l'on désire supprimer via l'ID et la couleur
+ * @param {string} id   Contient l'ID de l'objet que l'on veut supprimer
+ * @param {string} color       Contient la couleur de l'objet que l'on veut supprimer
+*/
 function delete_product_from_cart(id, color) {
   // On passe 2 arguments : id et color pour les comparer avec ce qu'
   // il y a dans le cart aux clés .id et .color 
 
   cart = cart.filter(c => !(c.id == id && c.color == color));
 
-  // Envoyer les nouvelles données dans le localStorage
+  // Envoi des nouvelles données dans le localStorage
   localStorage.setItem('cart', JSON.stringify(cart));
 
-  //  Avertir de la suppression et recharger la page
+  //  Alerte que la suppression a eu lieu et rechargement de la page
   alert('Votre article a bien été supprimé.');
   window.location.href = "cart.html";
 }
@@ -19,20 +25,26 @@ function delete_product_from_cart(id, color) {
 displayCart();
 
 // Création de la fonction asynchrone displayCart
+/**
+ * La fonction permets d'afficher les objets séléctionnés depuis l'API et le localStorage pour
+ * le prix et la quantité. Puis injecte les totaux dans le HTML.
+*/
 async function displayCart() {
   
   document.getElementById("cart__items").innerHTML = "";
-  
+  // Création des variables nécessaires
   let totalPrice = 0;
   let totalQuantity = 0;
   let cart = JSON.parse(localStorage["cart"]);
-
+    // Création d'une boucle qui fait appel aux infos de l'API en fonction de la commande
     for (let order of cart) {
       console.log(order);
       console.log(order.name);
       await fetch(`http://localhost:3000/api/products/${order.id}`)
+          // Utilisation de data pour récupérer les informations
           .then((data) => data.json())
           .then((data) => {
+              // Création de paramètres 
               totalQuantity += Number (order.quantity);
               totalPrice += Number (order.quantity * data.price);
                 displayProduct(order, data);
@@ -42,12 +54,19 @@ async function displayCart() {
               alert(error);
           });
     }
+    // Liaison HTML au Javascript
     document.getElementById('totalQuantity').innerHTML = totalQuantity;
     document.getElementById('totalPrice').innerHTML = totalPrice;
 }
 
+// Création fonction displayProduct avec en paramètres ' item ' et ' product '
+/**
+ * Ajoute dans le HTML les produits séléctionnés via le Javascript
+ * @param {string} item    Contient les informations de l'objet que l'on désire afficher (id, color, imageUrl, altTxt, name, quantity) depuis le localStorage
+ * @param {string} product       Contient les informations de l'objet que l'on désire afficher (price) depuis l'API
+*/
 function displayProduct(item, product) {
-  
+    // Injection de HTML via le Javascript en utilisant les variables créées
     document.getElementById("cart__items").innerHTML +=`
       <article class="cart__item" data-id="${item.id}" data-color="${item.color}">
         <div class="cart__item__img">
@@ -72,9 +91,16 @@ function displayProduct(item, product) {
       </article>`;
 }
 
-// Création fonction changeQuantity
+/**
+ * Change la quantité et le prix 
+ * @param {string} color    Contient la couleur du produit dont on veut changer la quantité
+ * @param {string} id       Contient l'ID du produit dont on veut changer la quantité
+ * @param {number} newQuantity    Contient la nouvelle quantité 
+ * @param {number} price    Contient le prix après changement de quantitéD
+*/
 const changeQuantity = (color, id, newQuantity, price) => {
-
+  // Création de variables nécessaires pour les calculs de prix, quantité, vérification des objets potentiellement
+  // déjà présents dans le panier
   let order = cart.find(o => (o.id == id && o.color == color)); 
   let differenceQuantity = newQuantity - order.quantity;
   let totalQuantity = Number (document.getElementById('totalQuantity').innerText);
@@ -85,9 +111,12 @@ const changeQuantity = (color, id, newQuantity, price) => {
   let totalPrice = Number (document.getElementById('totalPrice').innerText) + differencePrice;
   document.getElementById('totalPrice').innerHTML = totalPrice;
   localStorage.setItem("cart", JSON.stringify (cart)); 
-  
 }
 
+/**
+  * Ajout de la fonction ( addEvenListener ) au bouton ' submit ' pour les objets séléctionnés
+  * afin de les supprimer du panier ( localStorage )
+*/
 function deleteItem() {
   let deleteBtns = document.getElementsByClassName("deleteItem");
   for(btn of deleteBtns) {
@@ -97,14 +126,17 @@ function deleteItem() {
   }
 }
 
+// Création d'une variable ( addEventListener ) pour le bouton ' commander '
 let form = document.getElementsByClassName("cart__order__form")[0];
 form.addEventListener("submit", function(event, order, contact) {
   event.preventDefault();
   console.log(form.firstName.value)
+  // If pour alerter si le panier est vide ou qu'il ne contient rien
   if (cart == null || cart.length == 0) {
     alert('Votre panier est vide. Veuillez le remplir avant de commander.');
     return;
   }
+  // If pour vérifier si le contact existe et présent
   if (checkContact(form)) {
     let contact = {
       firstName: document.getElementById('firstName').value,
@@ -121,6 +153,7 @@ form.addEventListener("submit", function(event, order, contact) {
       products.push(id);
     }
     console.log(products)
+    // Fetch à l'API en POST ( envoi vers celle-ci ) de la commande
     fetch(`http://localhost:3000/api/products/order`, {
       method: "POST",
       body: JSON.stringify({
@@ -134,13 +167,20 @@ form.addEventListener("submit", function(event, order, contact) {
     .then((reponse)=> reponse.json())
     .then((data)=>{
       console.log(data);
-      //window.location.href = `./confirmation.html?id=${data.orderId}`;  
+      // Rediréction sur la page confirmation avec l'ID de la commande
+      window.location.href = `./confirmation.html?id=${data.orderId}`;  
     })
   
   }
 })
-
+// Fonction pour vérifier que ' contact ' est bon et bien rédigé
+// Utilisation des Regex nécessaires à chaque itération d'une information de ' contact '
+/**
+ * Vérifie la validité des informations ajoutées à contact
+ * @param {Object} contact    Contient les informations de contact (firstName, lastName, address, city, email)
+*/
 function checkContact(contact) {
+  // Création d'une variable qui permets de renvoyer true/false pour ne renvoyer qu'un formulaire correctement rempli
   let contactCorrect = true;
   
   let nameRGEX = /^[a-zA-Z\s,'-]{2,}$/;
@@ -180,6 +220,6 @@ function checkContact(contact) {
   } else {
       document.getElementById("emailErrorMsg").innerHTML = "";
   }
-  
+
   return contactCorrect;
 }

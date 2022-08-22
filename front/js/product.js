@@ -8,6 +8,9 @@ getOneProduct()
 
 // Création d'une fonction " getOneProduct " sans paramètre, qui appel l'API d'un produit
 // précis via son ID
+/**
+ * La fonction permets de récupérer un seul produit depuis l'API
+*/
 function getOneProduct() {
 
     return fetch(`http://localhost:3000/api/products/${id}`)
@@ -25,6 +28,10 @@ function getOneProduct() {
 
 // Création d'une fonction " displayProduct " avec en paramètre " product " qui créée 
 // du contenu HTML après avoir extrait le contenu depuis l'API
+/**
+ * La fonction permets d'afficher les informations de chaque produit récupéré dans l'API dans le HTML via le Javascript
+ * @param {Object} product      Contient les informations du produit récupérées dans l'API (imageURL, altTxt, name, price, description, colors)
+*/
 function displayProduct(product) {
 
     document.getElementsByClassName("item__img")[0].innerHTML +=`
@@ -43,9 +50,12 @@ function displayProduct(product) {
 document.getElementById("addToCart").addEventListener("click", addToCart);
 
 // Création d'une fonction Ajouter au panier
+/**
+ * La fonction permets d'ajouter au panier les produits séléctionnés et les informations les concernant.
+*/
 function addToCart() {
 
-    // Création de constantes price (innetText pour récupérer un span), quantity & color
+    // Création de constantes price (innetText pour récupérer un span), quantity, color, name, imageUrl, altTxt
     const price = document.getElementById("price").innerText;
     const quantity = document.getElementById("quantity").value;
     const color = document.getElementById("colors").value;
@@ -152,7 +162,7 @@ function addToCart() {
     alert('Le produit a bien été ajouté au panier.');
 
     // Retour à l'accueil après un ajout de produit au panier
-    //window.location.href = "./index.html";
+    window.location.href = "./index.html";
 
     //console.log(order);
     //console.log(localStorage.getItem("cart"));
