@@ -22,7 +22,7 @@ function getProducts() {
 // du contenu au HTML extrait de l'API
 /**
  * La fonction permets d'afficher les informations récupérées dans l'API dans le HTML via le Javascript
- * @param {Object} products      Contient les informations du produit récupérées dans l'API (id, imageURL, altTxt, name, description)
+ * @param {Object} products     Un Array qui contient les informations du produit récupérées dans l'API (id, imageURL, altTxt, name, description)
 */
 function displayProducts(products) {
     for (let i = 0; i < products.length; i++) {

@@ -4,7 +4,7 @@ let params = new URLSearchParams(document.location.search);
 let id = params.get("id");
 
 // Appel de la fonction getOneProduct
-getOneProduct()
+getOneProduct(id)
 
 // Création d'une fonction " getOneProduct " sans paramètre, qui appel l'API d'un produit
 // précis via son ID
@@ -34,7 +34,7 @@ function getOneProduct() {
 */
 function displayProduct(product) {
 
-    document.getElementsByClassName("item__img")[0].innerHTML +=`
+    document.getElementsByClassName("item__img")[0].innerHTML =`
     <img src="${product.imageUrl}" alt="${product.altTxt}">`
     document.getElementById("title").innerHTML +=product.name;
     document.getElementById("price").innerHTML +=product.price;

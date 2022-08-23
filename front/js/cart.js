@@ -3,7 +3,7 @@ let cart = JSON.parse(localStorage['cart']);
 
 // Création d'une fonction pour supprimer un produit
 /**
- * La fonction permets de comparer les objets que l'on désire supprimer via l'ID et la couleur
+ * La fonction permets de supprimer via l'ID et la couleur les objets désirés
  * @param {string} id   Contient l'ID de l'objet que l'on veut supprimer
  * @param {string} color       Contient la couleur de l'objet que l'on veut supprimer
 */
@@ -62,8 +62,8 @@ async function displayCart() {
 // Création fonction displayProduct avec en paramètres ' item ' et ' product '
 /**
  * Ajoute dans le HTML les produits séléctionnés via le Javascript
- * @param {string} item    Contient les informations de l'objet que l'on désire afficher (id, color, imageUrl, altTxt, name, quantity) depuis le localStorage
- * @param {string} product       Contient les informations de l'objet que l'on désire afficher (price) depuis l'API
+ * @param {Object} item    Contient les informations de l'objet que l'on désire afficher (id, color, imageUrl, altTxt, name, quantity) depuis le localStorage
+ * @param {Object} product       Contient les informations de l'objet que l'on désire afficher (price) depuis l'API
 */
 function displayProduct(item, product) {
     // Injection de HTML via le Javascript en utilisant les variables créées
