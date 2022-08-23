@@ -38,8 +38,6 @@ async function displayCart() {
   let cart = JSON.parse(localStorage["cart"]);
     // Création d'une boucle qui fait appel aux infos de l'API en fonction de la commande
     for (let order of cart) {
-      console.log(order);
-      console.log(order.name);
       await fetch(`http://localhost:3000/api/products/${order.id}`)
           // Utilisation de data pour récupérer les informations
           .then((data) => data.json())
@@ -51,7 +49,8 @@ async function displayCart() {
                 deleteItem(order);
           })
           .catch(function(error) {
-              alert(error);
+              alert(error)
+              alert('Problème de connexion.');
           });
     }
     // Liaison HTML au Javascript
@@ -128,9 +127,8 @@ function deleteItem() {
 
 // Création d'une variable ( addEventListener ) pour le bouton ' commander '
 let form = document.getElementsByClassName("cart__order__form")[0];
-form.addEventListener("submit", function(event, order, contact) {
+form.addEventListener("submit", function(event) {
   event.preventDefault();
-  console.log(form.firstName.value)
   // If pour alerter si le panier est vide ou qu'il ne contient rien
   if (cart == null || cart.length == 0) {
     alert('Votre panier est vide. Veuillez le remplir avant de commander.');
@@ -152,7 +150,6 @@ form.addEventListener("submit", function(event, order, contact) {
       let id = order.id;
       products.push(id);
     }
-    console.log(products)
     // Fetch à l'API en POST ( envoi vers celle-ci ) de la commande
     fetch(`http://localhost:3000/api/products/order`, {
       method: "POST",
@@ -166,7 +163,6 @@ form.addEventListener("submit", function(event, order, contact) {
     })
     .then((reponse)=> reponse.json())
     .then((data)=>{
-      console.log(data);
       // Rediréction sur la page confirmation avec l'ID de la commande
       window.location.href = `./confirmation.html?id=${data.orderId}`;  
     })

@@ -15,6 +15,7 @@ function getProducts() {
         })
         .catch(function(error) {
             alert(error);
+            alert(`Les produits ne peuvent s'afficher pour le moment.`);
         });
 }
 

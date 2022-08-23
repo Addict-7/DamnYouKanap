@@ -22,7 +22,7 @@ function getOneProduct() {
         })
         .catch(function(error) {
             alert(error);
-            alert("Cet article n'a pas été trouvé");
+            alert("Cet article n'a pas été trouvé.");
         })
 }
 
@@ -36,9 +36,9 @@ function displayProduct(product) {
 
     document.getElementsByClassName("item__img")[0].innerHTML =`
     <img src="${product.imageUrl}" alt="${product.altTxt}">`
-    document.getElementById("title").innerHTML +=product.name;
-    document.getElementById("price").innerHTML +=product.price;
-    document.getElementById("description").innerHTML +=product.description;
+    document.getElementById("title").innerHTML = product.name;
+    document.getElementById("price").innerHTML = product.price;
+    document.getElementById("description").innerHTML = product.description;
     for (let i = 0; i < product.colors.length; i++) {
         let color = product.colors[i];
         document.getElementById("colors").innerHTML +=`
@@ -110,7 +110,6 @@ function addToCart() {
 
     // Teste si au moins un élément du tableau renvoie " true "
     let orderDoesExists = cart.some(checkIfEqual);
-    console.log(orderDoesExists);
 
     // Version avancée Fonctions Fléchées
     // let orderDoesExists = cart.some(e => e.id === order.id && e.color === order.color)
@@ -124,7 +123,6 @@ function addToCart() {
             break
         }
     }
-    console.log(orderDoesExists);
     */
 
     // Vérifie si une commande a été trouvée [ Si celle-ci a été trouvée ]
@@ -135,8 +133,6 @@ function addToCart() {
         // Additionnes la quantité de la nouvelle commande à l'ancienne
         foundOrder.quantity += order.quantity;
         // Multiplies le prix par la quantité 
-        //foundOrder.price = price * foundOrder.quantity;
-        console.log(foundOrder);
     } else {
         // On ajoute (push) la commande au panier ( Lire de droite à gauche )
         cart.push(order);
@@ -156,15 +152,12 @@ function addToCart() {
     cart = JSON.parse(cart_JSON);
    
     // Affiche dans la console, le panier sous la forme d'un tableau contenant la commande
-    console.log(cart); 
+    console.log('cart', cart); 
 
-    // Alerte 
+    // Alerte quand un produit est ajouté au panier
     alert('Le produit a bien été ajouté au panier.');
 
     // Retour à l'accueil après un ajout de produit au panier
     window.location.href = "./index.html";
 
-    //console.log(order);
-    //console.log(localStorage.getItem("cart"));
-    //console.log(price);
 }
