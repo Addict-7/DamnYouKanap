@@ -10,7 +10,6 @@ let cart = JSON.parse(localStorage['cart']);
 function delete_product_from_cart(id, color) {
   // On passe 2 arguments : id et color pour les comparer avec ce qu'
   // il y a dans le cart aux clés .id et .color 
-
   cart = cart.filter(c => !(c.id == id && c.color == color));
 
   // Envoi des nouvelles données dans le localStorage
@@ -19,6 +18,19 @@ function delete_product_from_cart(id, color) {
   //  Alerte que la suppression a eu lieu et rechargement de la page
   alert('Votre article a bien été supprimé.');
   window.location.href = "cart.html";
+}
+
+/**
+  * Ajout de la fonction ( addEvenListener ) au bouton ' submit ' pour les objets séléctionnés
+  * afin de les supprimer du panier ( localStorage )
+*/
+function deleteItem() {
+  let deleteBtns = document.getElementsByClassName("deleteItem");
+  for(btn of deleteBtns) {
+    btn.addEventListener("click", (btn) => {
+      delete_product_from_cart(btn.target.dataset.id, btn.target.dataset.color);
+    });
+  }
 }
 
 // Appel de la fonction displayCart
@@ -61,7 +73,8 @@ async function displayCart() {
 // Création fonction displayProduct avec en paramètres ' item ' et ' product '
 /**
  * Ajoute dans le HTML les produits séléctionnés via le Javascript
- * @param {Object} item    Contient les informations de l'objet que l'on désire afficher (id, color, imageUrl, altTxt, name, quantity) depuis le localStorage
+ * @param {Object} item    Contient les informations de l'objet que l'on désire afficher (id, color, imageUrl, altTxt, name, quantity) depuis 
+ * le localStorage
  * @param {Object} product       Contient les informations de l'objet que l'on désire afficher (price) depuis l'API
 */
 function displayProduct(item, product) {
@@ -80,7 +93,8 @@ function displayProduct(item, product) {
           <div class="cart__item__content__settings">
             <div class="cart__item__content__settings__quantity">
                 <p>Qté :  </p>
-                <input type="number" data-id="${item.id}" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${item.quantity}" onchange="changeQuantity('${item.color}', '${item.id}', this.value, ${product.price})">
+                <input type="number" data-id="${item.id}" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${item.quantity}" onchange="changeQuantity('${item.color}', '${item.id}', 
+                this.value, ${product.price})">
             </div>
             <div class="cart__item__content__settings__delete">
                 <p class="deleteItem" data-id="${item.id}" data-color="${item.color}">Supprimer</p>
@@ -95,7 +109,7 @@ function displayProduct(item, product) {
  * @param {string} color    Contient la couleur du produit dont on veut changer la quantité
  * @param {string} id       Contient l'ID du produit dont on veut changer la quantité
  * @param {number} newQuantity    Contient la nouvelle quantité 
- * @param {number} price    Contient le prix après changement de quantitéD
+ * @param {number} price    Contient le prix après changement de quantité
 */
 const changeQuantity = (color, id, newQuantity, price) => {
   // Création de variables nécessaires pour les calculs de prix, quantité, vérification des objets potentiellement
@@ -110,19 +124,6 @@ const changeQuantity = (color, id, newQuantity, price) => {
   let totalPrice = Number (document.getElementById('totalPrice').innerText) + differencePrice;
   document.getElementById('totalPrice').innerHTML = totalPrice;
   localStorage.setItem("cart", JSON.stringify (cart)); 
-}
-
-/**
-  * Ajout de la fonction ( addEvenListener ) au bouton ' submit ' pour les objets séléctionnés
-  * afin de les supprimer du panier ( localStorage )
-*/
-function deleteItem() {
-  let deleteBtns = document.getElementsByClassName("deleteItem");
-  for(btn of deleteBtns) {
-    btn.addEventListener("click", (btn) => {
-      delete_product_from_cart(btn.target.dataset.id, btn.target.dataset.color);
-    });
-  }
 }
 
 // Création d'une variable ( addEventListener ) pour le bouton ' commander '

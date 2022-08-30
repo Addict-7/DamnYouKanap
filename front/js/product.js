@@ -70,7 +70,7 @@ function addToCart() {
     }
     // Ajout d'une Alerte si la quantité n'est pas valide
     if (quantity > 100 || quantity <= 0) {
-        alert("Choississez une quantité valide.");
+        alert("Choisissez une quantité valide.");
         return;
     }
 
